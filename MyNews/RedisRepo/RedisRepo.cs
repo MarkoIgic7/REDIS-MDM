@@ -38,6 +38,7 @@ public class RedisRepo
         redis.Set(vest.Id,serializedVest);
         redis.AddItemToList("vesti",serializedVest);
         redis.AddItemToList(vest.KategorijaID+":vest",vest.Id);
+        redis.AddItemToSortedSet("popularnevesti",serializedVest,0); // set za sortiranje vesti
     }
 
     public List<Vest> GetVesti()
@@ -141,6 +142,17 @@ public class RedisRepo
         var serializedKorisnik = redis.Get<string>(mail);
         Korisnik k = JsonSerializer.Deserialize<Korisnik>(serializedKorisnik);
         return k;
+    }
+    public List<Vest> getPopularneVesti()
+    {
+        List<Vest> popularneVesti = new List<Vest>();
+        var serilizedVesti = redis.GetAllItemsFromSortedSetDesc("popularnevesti");
+        foreach(var v in serilizedVesti)
+        {
+            popularneVesti.Add(JsonSerializer.Deserialize<Vest>(v));
+        }
+        return popularneVesti;
+
     }
     
 }
