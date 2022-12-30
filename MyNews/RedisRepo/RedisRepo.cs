@@ -37,7 +37,7 @@ public class RedisRepo
         var serializedVest= JsonSerializer.Serialize<Vest>(vest);
         redis.Set(vest.Id,serializedVest);
         redis.AddItemToList("vesti",serializedVest);
-        redis.AddItemToList("kategorija"+vest.KategorijaID+"vest",vest.Id);
+        redis.AddItemToList(vest.KategorijaID+":vest",vest.Id);
     }
 
     public List<Vest> GetVesti()
@@ -99,6 +99,19 @@ public class RedisRepo
         var vest = redis.Get<string>(Id);
         Vest v = JsonSerializer.Deserialize<Vest>(vest);
         return v;
+    }
+    public Korisnik RegisterAdmin()
+    {
+        var a=redis.Get<string>("admin@gmail.com");
+        if(a==null)
+        {
+            Korisnik k= new Korisnik();
+            k.Id="admin@gmail.com";
+            k.Password="admin123";
+            redis.Set(k.Id,JsonSerializer.Serialize<Korisnik>(k));
+            return k;
+        }
+        return null;
     }
     
 }

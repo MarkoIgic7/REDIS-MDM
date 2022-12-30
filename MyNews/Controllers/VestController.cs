@@ -20,7 +20,8 @@ public class VestController : ControllerBase
         new{
             Id=p.Id,
             Naslov=p.Naslov,
-            Tekst=p.Tekst,
+            KraciTekst=p.KratakTekst,
+            DuziTekst=p.DuziTekst,
             Datum=p.DatumObjavljivanja,
             Kategorija=redis.GetKategorija(p.KategorijaID)
         })
@@ -48,7 +49,8 @@ public class VestController : ControllerBase
         return Ok(new{
             Id = v.Id,
             Naslov = v.Naslov,
-            Tekst = v.Tekst,
+            KraciTekst=v.KratakTekst,
+            DuziTekst=v.DuziTekst,
             Datum = v.DatumObjavljivanja,
             Komentari = listaKomentara
         });
@@ -64,7 +66,8 @@ public class VestController : ControllerBase
         new{
             Id=p.Id,
             Naslov=p.Naslov,
-            Tekst=p.Tekst,
+            KraciTekst=p.KratakTekst,
+            DuziTekst=p.DuziTekst,
             Datum=p.DatumObjavljivanja,
             Kategorija=redis.GetKategorija(p.KategorijaID)
         })
