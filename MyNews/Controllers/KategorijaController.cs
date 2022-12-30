@@ -18,6 +18,7 @@ public class KategorijaController : ControllerBase
         return Ok(pom);
     }
     //Marko komentarisao
+    //Marko komentarisao2
     [HttpPost]
     [Route("SetKategorija")]
     public ActionResult<Kategorija> SetKategorija([FromBody] Kategorija kategorija)
