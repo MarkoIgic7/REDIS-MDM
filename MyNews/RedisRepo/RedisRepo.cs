@@ -113,5 +113,34 @@ public class RedisRepo
         }
         return null;
     }
+
+    public bool RegisterUser(Korisnik k)
+    {
+        var postojiKorisnik = redis.Get<string>(k.Id);
+        if(postojiKorisnik==null)
+        {
+            var serializedKorisnik = JsonSerializer.Serialize<Korisnik>(k);
+            redis.Add<string>(k.Id,serializedKorisnik);
+            redis.AddItemToSet("korisnici",serializedKorisnik);
+            return true;
+        }
+        else
+            return false;
+    }
+    public bool Login(string username,string password)
+    {
+        if(username=="admin@gmail.com" && password=="admin123")
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+    public Korisnik GetKorisnik(string mail)
+    {
+        var serializedKorisnik = redis.Get<string>(mail);
+        Korisnik k = JsonSerializer.Deserialize<Korisnik>(serializedKorisnik);
+        return k;
+    }
     
 }
