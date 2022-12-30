@@ -17,7 +17,7 @@ public class KategorijaController : ControllerBase
         var pom = redis.GetKategorija(id);
         return Ok(pom);
     }
-
+    //Marko komentarisao
     [HttpPost]
     [Route("SetKategorija")]
     public ActionResult<Kategorija> SetKategorija([FromBody] Kategorija kategorija)
