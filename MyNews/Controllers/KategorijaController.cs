@@ -20,6 +20,7 @@ public class KategorijaController : ControllerBase
     //Marko komentarisao
     //Marko komentarisao2
     //Marko komentar3
+    //Marko komentar4
     [HttpPost]
     [Route("SetKategorija")]
     public ActionResult<Kategorija> SetKategorija([FromBody] Kategorija kategorija)
