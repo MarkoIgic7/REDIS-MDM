@@ -73,4 +73,12 @@ public class VestController : ControllerBase
         })
         );
     }
+
+    [HttpGet]
+    [Route("GetPopularneVesti")]
+    public ActionResult GetPopularneVesti()
+    {
+        List<Vest> popularneVesti = redis.getPopularneVesti();
+        return Ok(popularneVesti);
+    }
 }
