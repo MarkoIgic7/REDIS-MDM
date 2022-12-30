@@ -29,7 +29,8 @@ public class KorisnikController : ControllerBase
         if(jesteAdmin)
         {
             return Ok(new{
-                Uloga = "Admin"
+                Uloga = "Admin",
+                Mail = "admin@gmail.com"
             });
         }
         else

@@ -81,4 +81,11 @@ public class VestController : ControllerBase
         List<Vest> popularneVesti = redis.getPopularneVesti();
         return Ok(popularneVesti);
     }
+
+    [HttpPut]
+    [Route("UpdateScore/{idVesti}")]
+    public ActionResult UpdateScore(string idVesti)
+    {
+        return Ok(redis.UpdateScore(idVesti));
+    }
 }

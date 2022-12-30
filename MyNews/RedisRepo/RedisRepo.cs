@@ -167,5 +167,17 @@ public class RedisRepo
         return popularneVesti;
 
     }
+    public double UpdateScore(string idVesti)
+    {
+        incrementCounterValue(idVesti);
+        double score = 0;
+        double counterVest = Double.Parse(getCounterValue(idVesti));
+        Vest v = GetVest(idVesti);
+        //double numDays = Double.Parse((DateTime.Today - v.DatumObjavljivanja.Date).ToString());
+        double numDays = (DateTime.Today - v.DatumObjavljivanja.Date).TotalDays;
+        score = counterVest*2.5/(numDays+1);
+        redis.AddItemToSortedSet("popularnevesti",redis.Get<string>(idVesti),score);
+        return score;
+    }
     
 }
