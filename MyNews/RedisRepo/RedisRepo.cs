@@ -6,6 +6,7 @@ public class RedisRepo
 {
     RedisClient redis = new RedisClient("localhost:6379");
     public RedisRepo(){}
+    
 
     public void setKategorija(Kategorija kat)
     {
@@ -38,6 +39,18 @@ public class RedisRepo
         redis.Set(vest.Id,serializedVest);
         redis.AddItemToList("vesti",serializedVest);
         redis.AddItemToList(vest.KategorijaID+":vest",vest.Id);
+
+        redis.Set("counter:"+vest.Id,0);
+    }
+
+    public string getCounterValue(string id)
+    {
+        return redis.Get<string>("counter:"+id);
+    }
+
+    public void incrementCounterValue(string id)
+    {
+        redis.IncrementValue("counter:"+id);
     }
 
     public List<Vest> GetVesti()
