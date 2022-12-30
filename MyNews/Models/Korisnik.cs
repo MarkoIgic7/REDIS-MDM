@@ -6,10 +6,10 @@ namespace Models
     {
 
         [Required]
-        public string Id { get; set; } = $"korisnik:{Guid.NewGuid().ToString()}";
+        public string Id { get; set; } // ovo je mail a samim tim i id jer je unique
 
-        [Required]
-        public string Username { get; set; }
+        //[Required]
+        // public string Username { get; set; }
         [Required]
         public string Password { get; set; }
     }
