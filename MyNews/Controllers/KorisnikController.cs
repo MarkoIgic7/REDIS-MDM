@@ -8,9 +8,12 @@ public class KorisnikController : ControllerBase
     RedisRepo redis = new RedisRepo();
 
     [HttpPost]
-    [Route("RegisterUser")]
-    public ActionResult RegisterUser([FromBody]Korisnik k)
+    [Route("RegisterUser/{mail}/{password}")]
+    public ActionResult RegisterUser(string mail,string password)
     {
+        Korisnik k = new Korisnik();
+        k.Id = mail;
+        k.Password = password;
         if(redis.RegisterUser(k))
         {
             return Ok("Korisnik dodat");

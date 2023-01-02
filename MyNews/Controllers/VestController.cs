@@ -23,6 +23,7 @@ public class VestController : ControllerBase
             KraciTekst=p.KratakTekst,
             DuziTekst=p.DuziTekst,
             Datum=p.DatumObjavljivanja,
+            Slika = p.Slika,
             Kategorija=redis.GetKategorija(p.KategorijaID)
         })
 
