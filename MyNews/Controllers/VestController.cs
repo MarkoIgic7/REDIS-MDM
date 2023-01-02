@@ -95,4 +95,11 @@ public class VestController : ControllerBase
     {
         return Ok(redis.UpdateScore(idVesti));
     }
+    [HttpDelete]
+    [Route("DeleteVest/{idVesti}")]
+    public ActionResult DeleteVest(string idVesti)
+    {
+        redis.DeleteVest(idVesti);
+        return  Ok();
+    }
 }

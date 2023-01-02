@@ -179,5 +179,15 @@ public class RedisRepo
         redis.AddItemToSortedSet("popularnevesti",redis.Get<string>(idVesti),score);
         return score;
     }
+    public void DeleteVest(string idVesti)
+    {
+        Vest v = GetVest(idVesti);
+        redis.Remove(idVesti); //izbrisana vest iz baze
+        var serializedVest = JsonSerializer.Serialize<Vest>(v);
+        redis.RemoveItemFromList("vesti",serializedVest);
+        redis.RemoveItemFromList(v.KategorijaID+":vest",v.Id);
+        redis.RemoveItemFromSortedSet("popularnevesti",serializedVest);
+        redis.Remove("counter:"+v.Id);
+    }
     
 }
