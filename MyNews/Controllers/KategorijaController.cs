@@ -22,12 +22,14 @@ public class KategorijaController : ControllerBase
     //Marko komentar3
     //Marko komentar4
     [HttpPost]
-    [Route("SetKategorija")]
-    public ActionResult<Kategorija> SetKategorija([FromBody] Kategorija kategorija)
+    [Route("SetKategorija/{naziv}")]
+    public ActionResult<Kategorija> SetKategorija(string naziv)
     {
         //RedisRepo f = new RedisRepo();
-        redis.setKategorija(kategorija);
-        return Ok(kategorija.Id);
+        Kategorija k = new Kategorija();
+        k.Naziv = naziv;
+        redis.setKategorija(k);
+        return Ok(k.Id);
     }
     [HttpGet]
     [Route("getKategorije")]

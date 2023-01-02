@@ -10,10 +10,13 @@ public class KomentarController : ControllerBase
     RedisRepo redis = new RedisRepo();
 
     [HttpPost]
-    [Route("AddComment/{idVesti}")]
-    public ActionResult AddComment([FromBody] Komentar komentar,string idVesti)
+    [Route("AddComment/{idVesti}/{tekst}/{korisnikID}")]
+    public ActionResult AddComment(string idVesti,string tekst,string korisnikID)
     {
-        redis.DodavanjeKomentaraVesti(komentar,idVesti);
+        Komentar k = new Komentar();
+        k.Tekst = tekst;
+        k.KorisnikId = korisnikID;
+        redis.DodavanjeKomentaraVesti(k,idVesti);
         return Ok("Dodat komentar");
     }
 }

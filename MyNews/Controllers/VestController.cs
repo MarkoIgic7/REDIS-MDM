@@ -30,12 +30,19 @@ public class VestController : ControllerBase
     }
 
     [HttpPost]
-    [Route("CreateVest")]
-    public ActionResult<Vest> CreateVest([FromBody] Vest vest)
+    [Route("CreateVest/{naslov}/{kratakTekst}/{duziTekst}/{slika}/{kategorijaID}")]
+    public ActionResult<Vest> CreateVest(string naslov,string kratakTekst,string duziTekst,string slika,string kategorijaID)
     {
         //RedisRepo f = new RedisRepo();
-        redis.createVest(vest);
-        return Ok(vest);
+        Vest v = new Vest();
+        v.Naslov = naslov;
+        v.KratakTekst = kratakTekst;
+        v.DuziTekst = duziTekst;
+        v.Slika = slika;
+        v.DatumObjavljivanja = DateTime.Now;
+        v.KategorijaID = kategorijaID;
+        redis.createVest(v);
+        return Ok(v);
     }
 
     [HttpGet]
