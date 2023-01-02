@@ -38,9 +38,11 @@ public class RedisRepo
         var serializedVest= JsonSerializer.Serialize<Vest>(vest);
         redis.Set(vest.Id,serializedVest);
         //redis.AddItemToList("vesti",serializedVest);
-        redis.PushItemToList("vesti",serializedVest);
+        //redis.PushItemToList("vesti",serializedVest);
+        redis.EnqueueItemOnList("vesti",serializedVest);
         //redis.AddItemToList(vest.KategorijaID+":vest",vest.Id);
-        redis.PushItemToList(vest.KategorijaID+":vest",vest.Id);
+        //redis.PushItemToList(vest.KategorijaID+":vest",vest.Id);
+        redis.EnqueueItemOnList(vest.KategorijaID+":vest",vest.Id);
         redis.AddItemToSortedSet("popularnevesti",serializedVest,0); // set za sortiranje vesti
         redis.Set("counter:"+vest.Id,0);
     }
