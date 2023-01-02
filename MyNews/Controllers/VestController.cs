@@ -20,7 +20,7 @@ public class VestController : ControllerBase
         new{
             Id=p.Id,
             Naslov=p.Naslov,
-            KraciTekst=p.KratakTekst,
+            KraciTekst=p.KraciTekst,
             DuziTekst=p.DuziTekst,
             Datum=p.DatumObjavljivanja,
             Slika = p.Slika,
@@ -37,7 +37,7 @@ public class VestController : ControllerBase
         //RedisRepo f = new RedisRepo();
         Vest v = new Vest();
         v.Naslov = naslov;
-        v.KratakTekst = kratakTekst;
+        v.KraciTekst = kratakTekst;
         v.DuziTekst = duziTekst;
         v.Slika = slika;
         v.DatumObjavljivanja = DateTime.Now;
@@ -57,11 +57,21 @@ public class VestController : ControllerBase
         return Ok(new{
             Id = v.Id,
             Naslov = v.Naslov,
-            KraciTekst=v.KratakTekst,
+            KraciTekst=v.KraciTekst,
             DuziTekst=v.DuziTekst,
             Datum = v.DatumObjavljivanja,
             Komentari = listaKomentara
         });
+    }
+    [HttpGet]
+    [Route("SviKomentariVesti/{idVest}")]
+    public ActionResult SviKomentariVesti(string idVest)
+    {
+        //Vest v = redis.VestSaKomentarima(idVest);
+        List<Komentar> listaKomentara = new List<Komentar>();
+        listaKomentara = redis.SviKomentariVesti(idVest);
+
+        return Ok(listaKomentara);
     }
     [HttpGet]
     [Route("getSveVestiOdredjeneKategorije/{idKategorije}")]
@@ -74,7 +84,7 @@ public class VestController : ControllerBase
         new{
             Id=p.Id,
             Naslov=p.Naslov,
-            KraciTekst=p.KratakTekst,
+            KraciTekst=p.KraciTekst,
             DuziTekst=p.DuziTekst,
             Datum=p.DatumObjavljivanja,
             Kategorija=redis.GetKategorija(p.KategorijaID)
