@@ -17,6 +17,6 @@ public class KomentarController : ControllerBase
         k.Tekst = tekst;
         k.KorisnikId = korisnikID;
         redis.DodavanjeKomentaraVesti(k,idVesti);
-        return Ok("Dodat komentar");
+        return Ok(k);
     }
 }
