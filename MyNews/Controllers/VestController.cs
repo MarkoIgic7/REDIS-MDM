@@ -20,7 +20,7 @@ public class VestController : ControllerBase
         new{
             Id=p.Id,
             Naslov=p.Naslov,
-            KraciTekst=p.KraciTekst,
+            KratakTekst=p.KratakTekst,
             DuziTekst=p.DuziTekst,
             Datum=p.DatumObjavljivanja,
             Slika = p.Slika,
@@ -37,7 +37,7 @@ public class VestController : ControllerBase
         //RedisRepo f = new RedisRepo();
         Vest v = new Vest();
         v.Naslov = naslov;
-        v.KraciTekst = kratakTekst;
+        v.KratakTekst = kratakTekst;
         v.DuziTekst = duziTekst;
         v.Slika = slika;
         v.DatumObjavljivanja = DateTime.Now;
@@ -57,7 +57,7 @@ public class VestController : ControllerBase
         return Ok(new{
             Id = v.Id,
             Naslov = v.Naslov,
-            KraciTekst=v.KraciTekst,
+            KratakTekst=v.KratakTekst,
             DuziTekst=v.DuziTekst,
             Datum = v.DatumObjavljivanja,
             Komentari = listaKomentara
@@ -84,7 +84,7 @@ public class VestController : ControllerBase
         new{
             Id=p.Id,
             Naslov=p.Naslov,
-            KraciTekst=p.KraciTekst,
+            KratakTekst=p.KratakTekst,
             DuziTekst=p.DuziTekst,
             Datum=p.DatumObjavljivanja,
             Kategorija=redis.GetKategorija(p.KategorijaID)

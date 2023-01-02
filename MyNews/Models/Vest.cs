@@ -10,7 +10,7 @@ namespace Models
         [Required]
         public string Naslov { get; set; }
         [Required]
-        public string KraciTekst { get; set; }
+        public string KratakTekst { get; set; }
         [Required]
         public string DuziTekst { get; set; }
         public string Slika { get; set; }
