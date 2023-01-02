@@ -97,7 +97,18 @@ public class VestController : ControllerBase
     public ActionResult GetPopularneVesti()
     {
         List<Vest> popularneVesti = redis.getPopularneVesti();
-        return Ok(popularneVesti);
+        return Ok(popularneVesti.Select(p=>
+        new{
+            Id=p.Id,
+            Naslov=p.Naslov,
+            KratakTekst=p.KratakTekst,
+            DuziTekst=p.DuziTekst,
+            Datum=p.DatumObjavljivanja,
+            Slika = p.Slika,
+            Kategorija=redis.GetKategorija(p.KategorijaID)
+        })
+
+        );
     }
 
     [HttpPut]
