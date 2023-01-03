@@ -56,6 +56,7 @@ public class VestController : ControllerBase
         Vest v = redis.VestSaKomentarima(idVest);
         List<Komentar> listaKomentara = new List<Komentar>();
         listaKomentara = redis.SviKomentariVesti(idVest);
+        Kategorija k= redis.GetKategorija(v.KategorijaID);
 
         return Ok(new{
             Id = v.Id,
@@ -63,7 +64,8 @@ public class VestController : ControllerBase
             KratakTekst=v.KratakTekst,
             DuziTekst=v.DuziTekst,
             Datum = v.DatumObjavljivanja,
-            Komentari = listaKomentara
+            Komentari = listaKomentara,
+            Kategorija=k.Naziv
         });
     }
     [HttpGet]
