@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using System.Text.Json;
 
 namespace MyNews.Controllers;
 
@@ -43,6 +44,8 @@ public class VestController : ControllerBase
         v.DatumObjavljivanja = DateTime.Now;
         v.KategorijaID = kategorijaID;
         redis.createVest(v);
+        Kategorija k= redis.GetKategorija(kategorijaID);
+        redis.PublishMesg(k.Naziv,JsonSerializer.Serialize<Vest>(v));
         return Ok(v);
     }
 
@@ -97,7 +100,18 @@ public class VestController : ControllerBase
     public ActionResult GetPopularneVesti()
     {
         List<Vest> popularneVesti = redis.getPopularneVesti();
-        return Ok(popularneVesti);
+        return Ok(popularneVesti.Select(p=>
+        new{
+            Id=p.Id,
+            Naslov=p.Naslov,
+            KratakTekst=p.KratakTekst,
+            DuziTekst=p.DuziTekst,
+            Datum=p.DatumObjavljivanja,
+            Slika = p.Slika,
+            Kategorija=redis.GetKategorija(p.KategorijaID)
+        })
+
+        );
     }
 
     [HttpPut]
