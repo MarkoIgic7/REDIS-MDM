@@ -84,7 +84,7 @@ public class RedisRepo
         Vest vest = JsonSerializer.Deserialize<Vest>(vestIzRedisa); // preuzeta vest za konkretan komentar
 
         redis.AddItemToList(vest.Id+":komentari",komentar.Id);
-
+        
     }
     public List<Komentar> SviKomentariVesti(string idVest)
     {
@@ -200,6 +200,16 @@ public class RedisRepo
         redis.RemoveItemFromList(v.KategorijaID+":vest",v.Id);
         redis.RemoveItemFromSortedSet("popularnevesti",serializedVest);
         redis.Remove("counter:"+v.Id);
+        Kategorija k=GetKategorija(v.KategorijaID);
+        var korisnici= redis.GetAllItemsFromSet("sub:"+k.Naziv);
+        foreach( var kor in korisnici)
+        {
+           if(db.ListPosition("sub:"+kor,serializedVest)==0)
+           {
+                redis.RemoveItemFromList("sub:"+kor,serializedVest);
+           }
+        }
+
     }
 
     public void PublishMesg(string kanal,string msg)
@@ -224,6 +234,7 @@ public class RedisRepo
                     k.Procitano=false;
                     //redis.SetValueIfExists(user,JsonSerializer.Serialize<Korisnik>(k));
                     redis.Set(user,JsonSerializer.Serialize<Korisnik>(k));
+                    redis.AddItemToSet("sub:"+kanal,user);
                 }
 
         });
