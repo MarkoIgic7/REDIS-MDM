@@ -218,6 +218,10 @@ public class RedisRepo
         //redisSub.SubscribeToChannelsAsync(new string[]{"kanal"});
         sub.Subscribe(kanal, (channel, message) => {
              redis.EnqueueItemOnList("sub:"+user,message);
+             Korisnik k= GetKorisnik(user);
+            k.Procitano=false;
+            //redis.SetValueIfExists(user,JsonSerializer.Serialize<Korisnik>(k));
+            redis.Set(user,JsonSerializer.Serialize<Korisnik>(k));
 
         });
        
@@ -242,7 +246,7 @@ public class RedisRepo
     public void ChangeStatus(string user)
     {
         Korisnik k= GetKorisnik(user);
-        k.Procitano=!k.Procitano;
+        k.Procitano=true;
         //redis.SetValueIfExists(user,JsonSerializer.Serialize<Korisnik>(k));
         redis.Set(user,JsonSerializer.Serialize<Korisnik>(k));
 
