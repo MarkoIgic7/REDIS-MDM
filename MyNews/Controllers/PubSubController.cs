@@ -33,7 +33,17 @@ public class PubSubController : ControllerBase
 
         return Ok(new{
             status=k.Procitano,
-            vesti=vesti
+            vesti=vesti.Select(p=>
+            new{
+            Id=p.Id,
+            Naslov=p.Naslov,
+            KratakTekst=p.KratakTekst,
+            DuziTekst=p.DuziTekst,
+            Datum=p.DatumObjavljivanja,
+            Slika = p.Slika,
+            Kategorija=redis.GetKategorija(p.KategorijaID)
+            })
+
         });
     }
 
