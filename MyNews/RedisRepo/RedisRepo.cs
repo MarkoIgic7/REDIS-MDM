@@ -5,6 +5,9 @@ using ServiceStack.Redis;
 public class RedisRepo
 {
     RedisClient redis = new RedisClient("localhost:6379");
+
+    public object TestConfig { get; private set; }
+
     public RedisRepo(){}
     
 
@@ -193,5 +196,4 @@ public class RedisRepo
         redis.RemoveItemFromSortedSet("popularnevesti",serializedVest);
         redis.Remove("counter:"+v.Id);
     }
-    
 }

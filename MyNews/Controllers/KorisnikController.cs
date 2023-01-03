@@ -42,7 +42,7 @@ public class KorisnikController : ControllerBase
             Korisnik k = redis.GetKorisnik(username);
             if(k.Password==password)
             {
-                return Ok(new{
+               return Ok(new{
                 Uloga = "Korisnik",
                 Mail = k.Id
             });
