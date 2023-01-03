@@ -1,10 +1,15 @@
 using System.Text.Json;
 using Models;
 using ServiceStack.Redis;
+using StackExchange.Redis;
 
 public class RedisRepo
 {
     RedisClient redis = new RedisClient("localhost:6379");
+    static ConnectionMultiplexer redis2 = ConnectionMultiplexer.Connect("localhost:6379");
+    IDatabase db = redis2.GetDatabase();
+    ISubscriber sub = redis2.GetSubscriber();
+    
     public RedisRepo(){}
     
 
@@ -138,8 +143,11 @@ public class RedisRepo
         if(postojiKorisnik==null)
         {
             var serializedKorisnik = JsonSerializer.Serialize<Korisnik>(k);
-            redis.Add<string>(k.Id,serializedKorisnik);
+            //redis.Add<string>(k.Id,serializedKorisnik);
+            redis.Set(k.Id,serializedKorisnik);
             redis.AddItemToSet("korisnici",serializedKorisnik);
+            
+            
             return true;
         }
         else
@@ -193,5 +201,52 @@ public class RedisRepo
         redis.RemoveItemFromSortedSet("popularnevesti",serializedVest);
         redis.Remove("counter:"+v.Id);
     }
+
+    public void PublishMesg(string kanal,string msg)
+    {
+       // redis.PublishMessage("kanal",msg);
+       //redis.PublishMessage("kanal",msg);
+       sub.Publish(kanal,msg);
+    }
+
+    List<string> msgs=new List<string>();
+    public void Subscribe(string kanal,string user){
+        //IRedisSubscriptionAsync redisSub= (IRedisSubscriptionAsync)redis.CreateSubscription();
+        //redisSub.SubscribeToChannels(new string[]{"kanal"});
+        //redisSub.OnMessageAsync+=Func<out>{}
+       
+        //redisSub.SubscribeToChannelsAsync(new string[]{"kanal"});
+        sub.Subscribe(kanal, (channel, message) => {
+             redis.EnqueueItemOnList("sub:"+user,message);
+
+        });
+       
+    }
+    public List<string> getList()
+    {
+        return msgs;
+    }
+
+    public List<Vest> getSubscriptions(string user)
+    {
+        List<Vest> vesti= new List<Vest>();
+        var redisVesti=redis.GetAllItemsFromList("sub:"+user);
+        foreach(var v in redisVesti)
+        {
+            Vest vest= JsonSerializer.Deserialize<Vest>(v);
+            vesti.Add(vest);
+        }
+        return vesti;
+    }
+
+    public void ChangeStatus(string user)
+    {
+        Korisnik k= GetKorisnik(user);
+        k.Procitano=!k.Procitano;
+        //redis.SetValueIfExists(user,JsonSerializer.Serialize<Korisnik>(k));
+        redis.Set(user,JsonSerializer.Serialize<Korisnik>(k));
+
+    }
+
     
 }

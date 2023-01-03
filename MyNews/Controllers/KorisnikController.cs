@@ -14,9 +14,14 @@ public class KorisnikController : ControllerBase
         Korisnik k = new Korisnik();
         k.Id = mail;
         k.Password = password;
+        k.Procitano=true;
         if(redis.RegisterUser(k))
         {
-            return Ok("Korisnik dodat");
+               return Ok(new{
+                Uloga = "Korisnik",
+                Mail = k.Id,
+                Obavestenja=redis.getSubscriptions(mail)
+               });
         }
         else
             return BadRequest("Korisnik vec postoji");
@@ -44,7 +49,8 @@ public class KorisnikController : ControllerBase
             {
                 return Ok(new{
                 Uloga = "Korisnik",
-                Mail = k.Id
+                Mail = k.Id,
+                Obavestenja=redis.getSubscriptions(username)
             });
             }
             else
@@ -53,5 +59,21 @@ public class KorisnikController : ControllerBase
             }
         }
         
+    }
+    [HttpPut]
+    [Route("ChangeStatus/{user}")]
+    public ActionResult ChangeStatus(string user)
+    {
+        
+        redis.ChangeStatus(user);
+        Korisnik k=redis.GetKorisnik(user);
+        return Ok(k.Procitano);
+
+    }
+    [HttpGet]
+    [Route ("GetKorisnik/{user}")]
+    public ActionResult GetKorisnik(string user)
+    {
+        return Ok(redis.GetKorisnik(user));
     }
 }

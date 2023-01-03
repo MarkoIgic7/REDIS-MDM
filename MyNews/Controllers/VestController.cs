@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using System.Text.Json;
 
 namespace MyNews.Controllers;
 
@@ -43,6 +44,8 @@ public class VestController : ControllerBase
         v.DatumObjavljivanja = DateTime.Now;
         v.KategorijaID = kategorijaID;
         redis.createVest(v);
+        Kategorija k= redis.GetKategorija(kategorijaID);
+        redis.PublishMesg(k.Naziv,JsonSerializer.Serialize<Vest>(v));
         return Ok(v);
     }
 
