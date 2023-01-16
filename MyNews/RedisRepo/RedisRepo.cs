@@ -198,9 +198,10 @@ public class RedisRepo
         redis.RemoveItemFromSortedSet("popularnevesti",serializedVest);
         redis.Remove("counter:"+v.Id);
         Kategorija k=GetKategorija(v.KategorijaID);
-        var korisnici= redis.GetAllItemsFromSet("sub:"+k.Naziv);
+        var korisnici= redis.GetAllItemsFromSet("sub:"+k.Id);
         foreach( var kor in korisnici)
         {
+            Console.WriteLine(db.ListPosition("sub:"+kor,serializedVest));
            if(db.ListPosition("sub:"+kor,serializedVest)==0)
            {
                 redis.RemoveItemFromList("sub:"+kor,serializedVest);
@@ -225,6 +226,7 @@ public class RedisRepo
         //redisSub.SubscribeToChannelsAsync(new string[]{"kanal"});
         redis.AddItemToSet("subkategorije:"+user,kanal);
         sub.Subscribe(kanal, (channel, message) => {
+            //Console.WriteLine(db.ListPosition("sub:"+user,message));
              if(db.ListPosition("sub:"+user,message)<0)
                 {
                     redis.EnqueueItemOnList("sub:"+user,message);
@@ -235,13 +237,13 @@ public class RedisRepo
                     redis.AddItemToSet("sub:"+kanal,user);
                 }
 
-             redis.EnqueueItemOnList("sub:"+user,message);
+             //redis.EnqueueItemOnList("sub:"+user,message);
         });
     }
     public List<string> vratiSveKategorijeNaKojeJeKorisnikPretplacen(string id)
     {
         var kategorije = redis.GetAllItemsFromSet("subkategorije:"+id);
-        List<string> res = new List<string>(kategorije.Count);
+        List<string> res = new List<string>(kategorije.Count());
         foreach (var k in kategorije)
         {
             res.Add(k);

@@ -1,3 +1,5 @@
+using Hubs;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +8,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSignalR(e => {
+                e.MaximumReceiveMessageSize = 102400000;
+            });
 
 builder.Services.AddCors(options => {
                 options.AddPolicy("CORS", builder => {
@@ -53,6 +58,13 @@ app.UseAuthorization();
 
 app.UseCors("CORS");
 
+
 app.MapControllers();
 
+
 app.Run();
+app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapHub<Notif>("/hubs/notif");
+            });

@@ -12,10 +12,10 @@ public class VestController : ControllerBase
 {
     RedisRepo redis = new RedisRepo();
      public IHubContext<Notif,INotifHub> NotifHub { get; set; }
-
+      
     public VestController(IHubContext<Notif,INotifHub> hub)
     {
-        NotifHub = hub;
+            NotifHub=hub;         
     }
 
     [HttpGet]
@@ -55,7 +55,7 @@ public class VestController : ControllerBase
         //Kategorija k= redis.GetKategorija(kategorijaID);
         redis.PublishMesg(kategorijaID,JsonSerializer.Serialize<Vest>(v));
 
-        await NotifHub.Clients.Group(kategorijaID).SendMessageToAll(v.Id,naslov,kratakTekst,duziTekst,slika,v.DatumObjavljivanja,kategorijaID);
+        //await NotifHub.Clients.Group(kategorijaID).SendMessageToAll(v.Id,naslov,kratakTekst,duziTekst,slika,v.DatumObjavljivanja,kategorijaID);
         return Ok(v);
     }
 
@@ -75,7 +75,7 @@ public class VestController : ControllerBase
             DuziTekst=v.DuziTekst,
             Datum = v.DatumObjavljivanja,
             Komentari = listaKomentara,
-            Kategorija=k.Naziv
+            Kategorija=k.Naziv,
             KategorijaId = v.KategorijaID
         });
     }

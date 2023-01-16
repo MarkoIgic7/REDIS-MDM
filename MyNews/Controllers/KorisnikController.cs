@@ -76,4 +76,10 @@ public class KorisnikController : ControllerBase
     {
         return Ok(redis.GetKorisnik(user));
     }
+    [HttpGet]
+    [Route ("GetStatusKorisnika/{userId}")]
+    public ActionResult GetStatusKorisnika(string userId)
+    {
+        return Ok(redis.GetKorisnik(userId).Procitano);
+    }
 }
