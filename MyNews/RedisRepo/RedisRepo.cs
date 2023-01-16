@@ -18,8 +18,6 @@ public class RedisRepo
         var serializedkat = JsonSerializer.Serialize<Kategorija>(kat);   
         redis.Set(kat.Id,serializedkat);
         redis.AddItemToSet("kategorije",serializedkat);
-        
-        
     }
     public Kategorija GetKategorija(string id)
     {
@@ -147,7 +145,6 @@ public class RedisRepo
             redis.Set(k.Id,serializedKorisnik);
             redis.AddItemToSet("korisnici",serializedKorisnik);
             
-            
             return true;
         }
         else
@@ -216,11 +213,20 @@ public class RedisRepo
         //redisSub.OnMessageAsync+=Func<out>{}
        
         //redisSub.SubscribeToChannelsAsync(new string[]{"kanal"});
+        redis.AddItemToSet("subkategorije:"+user,kanal);
         sub.Subscribe(kanal, (channel, message) => {
              redis.EnqueueItemOnList("sub:"+user,message);
-
         });
-       
+    }
+    public List<string> vratiSveKategorijeNaKojeJeKorisnikPretplacen(string id)
+    {
+        var kategorije = redis.GetAllItemsFromSet("subkategorije:"+id);
+        List<string> res = new List<string>(kategorije.Count);
+        foreach (var k in kategorije)
+        {
+            res.Add(k);
+        }
+        return res;
     }
     public List<string> getList()
     {
