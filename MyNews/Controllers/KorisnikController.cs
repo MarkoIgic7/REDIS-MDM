@@ -47,6 +47,12 @@ public class KorisnikController : ControllerBase
             Korisnik k = redis.GetKorisnik(username);
             if(k.Password==password)
             {
+                var kategorije = redis.vratiSveKategorijeNaKojeJeKorisnikPretplacen(username);
+                foreach(var kat in kategorije)
+                {
+                    redis.Subscribe(kat,username);
+                }
+
                return Ok(new{
                 Uloga = "Korisnik",
                 Mail = k.Id,
