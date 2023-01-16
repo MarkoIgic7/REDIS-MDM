@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using System.Text.Json;
+using Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace MyNews.Controllers;
 
@@ -9,6 +11,12 @@ namespace MyNews.Controllers;
 public class VestController : ControllerBase
 {
     RedisRepo redis = new RedisRepo();
+     public IHubContext<Notif,INotifHub> NotifHub { get; set; }
+
+    public VestController(IHubContext<Notif,INotifHub> hub)
+    {
+        NotifHub = hub;
+    }
 
     [HttpGet]
     [Route("getSveVesti")]
@@ -33,7 +41,7 @@ public class VestController : ControllerBase
 
     [HttpPost]
     [Route("CreateVest/{naslov}/{kratakTekst}/{duziTekst}/{slika}/{kategorijaID}")]
-    public ActionResult<Vest> CreateVest(string naslov,string kratakTekst,string duziTekst,string slika,string kategorijaID)
+    public async Task<ActionResult> CreateVest(string naslov,string kratakTekst,string duziTekst,string slika,string kategorijaID)
     {
         //RedisRepo f = new RedisRepo();
         Vest v = new Vest();
@@ -44,8 +52,10 @@ public class VestController : ControllerBase
         v.DatumObjavljivanja = DateTime.Now;
         v.KategorijaID = kategorijaID;
         redis.createVest(v);
-        Kategorija k= redis.GetKategorija(kategorijaID);
-        redis.PublishMesg(k.Naziv,JsonSerializer.Serialize<Vest>(v));
+        //Kategorija k= redis.GetKategorija(kategorijaID);
+        redis.PublishMesg(kategorijaID,JsonSerializer.Serialize<Vest>(v));
+
+        await NotifHub.Clients.Group(kategorijaID).SendMessageToAll(v.Id,naslov,kratakTekst,duziTekst,slika,v.DatumObjavljivanja,kategorijaID);
         return Ok(v);
     }
 
@@ -66,6 +76,7 @@ public class VestController : ControllerBase
             Datum = v.DatumObjavljivanja,
             Komentari = listaKomentara,
             Kategorija=k.Naziv
+            KategorijaId = v.KategorijaID
         });
     }
     [HttpGet]

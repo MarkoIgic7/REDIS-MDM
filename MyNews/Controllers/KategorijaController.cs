@@ -39,4 +39,11 @@ public class KategorijaController : ControllerBase
         var pom = redis.GetKategorije();
         return Ok(pom);
     }
+    [HttpGet]
+    [Route("vratiSveKategorijeNaKojeJeKorisnikPretplacen/{idKorisnika}")]
+    public ActionResult vratiSveKategorijeNaKojeJeKorisnikPretplacen(string idKorisnika)
+    {
+        var kategorije = redis.vratiSveKategorijeNaKojeJeKorisnikPretplacen(idKorisnika);
+        return Ok(kategorije);
+    }
 }
