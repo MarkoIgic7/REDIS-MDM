@@ -55,7 +55,7 @@ public class VestController : ControllerBase
         //Kategorija k= redis.GetKategorija(kategorijaID);
         redis.PublishMesg(kategorijaID,JsonSerializer.Serialize<Vest>(v));
 
-        //await NotifHub.Clients.Group(kategorijaID).SendMessageToAll(v.Id,naslov,kratakTekst,duziTekst,slika,v.DatumObjavljivanja,kategorijaID);
+        await NotifHub.Clients.Group(kategorijaID).SendMessageToAll(v.Id,naslov,kratakTekst,duziTekst,slika,v.DatumObjavljivanja,kategorijaID);
         return Ok(v);
     }
 

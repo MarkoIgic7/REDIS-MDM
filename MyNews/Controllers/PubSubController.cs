@@ -41,7 +41,7 @@ public class PubSubController : ControllerBase
             DuziTekst=p.DuziTekst,
             Datum=p.DatumObjavljivanja,
             Slika = p.Slika,
-            Kategorija=redis.GetKategorija(p.KategorijaID)
+            KategorijaId=p.KategorijaID
             })
 
         });
