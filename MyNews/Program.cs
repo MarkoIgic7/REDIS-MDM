@@ -8,9 +8,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSignalR(e => {
-                e.MaximumReceiveMessageSize = 102400000;
-            });
+builder.Services.AddSignalR();
+
 
 builder.Services.AddCors(options => {
                 options.AddPolicy("CORS", builder => {
@@ -31,7 +30,12 @@ builder.Services.AddCors(options => {
                         "https://localhost:7220",
                         "http://localhost:7220",
                         "https://127.0.0.1:7220",
-                        "http://127.0.0.1:7220"
+                        "http://127.0.0.1:7220",
+                        "https://localhost:7107",
+                        "http://localhost:7107",
+                        "https://127.0.0.1:7107",
+                        "http://127.0.0.1:7107"
+
 
  
   
@@ -39,7 +43,8 @@ builder.Services.AddCors(options => {
   
                     })
                     .AllowAnyHeader()
-                    .AllowAnyMethod();
+                    .AllowAnyMethod()
+                    .AllowCredentials();
                 });
             });
 
@@ -63,10 +68,13 @@ app.UseCors("CORS");
 
 app.MapControllers();
 
+app.MapHub<Notif>("/hubs/notif");
 
 app.Run();
-app.UseEndpoints(endpoints =>
+
+
+/*app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<Notif>("/hubs/notif");
-            });
+            });*/

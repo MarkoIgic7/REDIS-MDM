@@ -8,15 +8,16 @@ namespace Hubs
 {
     public class Notif : Hub<INotifHub>
     {
-        public async Task SendMessageToAll( string idKategorije,string Id,string Naslov,string KratakTekst,string DuziTekst,string Slika,DateTime DatumObjavljivanja,string KategorijaID) 
+        public async Task SendMessageToAll(string id,string naslov,string kratakTekst,string duziTekst,string slika,DateTime datum,string kategorijaId) 
         {
-            await Clients.Group(idKategorije).SendMessageToAll(Id,Naslov,KratakTekst,DuziTekst,Slika,DatumObjavljivanja,KategorijaID); 
+            await Clients.Group(kategorijaId).SendMessageToAll(id,naslov,kratakTekst,duziTekst,slika,datum,kategorijaId);
+             
         }
         
         public async Task JoinGroup(string idKategorije)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId,idKategorije);
         }
-       
+
     }
 }
