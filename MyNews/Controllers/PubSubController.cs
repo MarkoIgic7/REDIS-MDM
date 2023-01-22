@@ -40,7 +40,7 @@ public class PubSubController : ControllerBase
             KratakTekst=p.KratakTekst,
             DuziTekst=p.DuziTekst,
             Datum=p.DatumObjavljivanja,
-            Slika = p.Slika,
+            //Slika = p.Slika,
             KategorijaId=p.KategorijaID
             })
 

@@ -13,7 +13,7 @@ namespace Models
         public string KratakTekst { get; set; }
         [Required]
         public string DuziTekst { get; set; }
-        public string Slika { get; set; }
+        //public string Slika { get; set; }
         [Required]
         public DateTime DatumObjavljivanja { get; set; }
 

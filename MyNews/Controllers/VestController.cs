@@ -32,7 +32,7 @@ public class VestController : ControllerBase
             KratakTekst=p.KratakTekst,
             DuziTekst=p.DuziTekst,
             Datum=p.DatumObjavljivanja,
-            Slika = p.Slika,
+            //Slika = p.Slika,
             Kategorija=redis.GetKategorija(p.KategorijaID)
         })
 
@@ -40,22 +40,22 @@ public class VestController : ControllerBase
     }
 
     [HttpPost]
-    [Route("CreateVest/{naslov}/{kratakTekst}/{duziTekst}/{slika}/{kategorijaID}")]
-    public async Task<ActionResult> CreateVest(string naslov,string kratakTekst,string duziTekst,string slika,string kategorijaID)
+    [Route("CreateVest/{naslov}/{kratakTekst}/{duziTekst}/{kategorijaID}")]
+    public async Task<ActionResult> CreateVest(string naslov,string kratakTekst,string duziTekst,string kategorijaID)
     {
         //RedisRepo f = new RedisRepo();
         Vest v = new Vest();
         v.Naslov = naslov;
         v.KratakTekst = kratakTekst;
         v.DuziTekst = duziTekst;
-        v.Slika = slika;
+        //v.Slika = slika;
         v.DatumObjavljivanja = DateTime.Now;
         v.KategorijaID = kategorijaID;
         redis.createVest(v);
         //Kategorija k= redis.GetKategorija(kategorijaID);
         redis.PublishMesg(kategorijaID,JsonSerializer.Serialize<Vest>(v));
 
-        await NotifHub.Clients.Group(kategorijaID).SendMessageToAll(v.Id,naslov,kratakTekst,duziTekst,slika,v.DatumObjavljivanja,kategorijaID);
+        await NotifHub.Clients.Group(kategorijaID).SendMessageToAll(v.Id,naslov,kratakTekst,duziTekst,v.DatumObjavljivanja,kategorijaID);
         return Ok(v);
     }
 
@@ -120,7 +120,7 @@ public class VestController : ControllerBase
             KratakTekst=p.KratakTekst,
             DuziTekst=p.DuziTekst,
             Datum=p.DatumObjavljivanja,
-            Slika = p.Slika,
+            //Slika = p.Slika,
             Kategorija=redis.GetKategorija(p.KategorijaID)
         })
 

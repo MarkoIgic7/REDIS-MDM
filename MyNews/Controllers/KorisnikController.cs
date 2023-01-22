@@ -45,7 +45,9 @@ public class KorisnikController : ControllerBase
         {
             //vracam korisnika
             Korisnik k = redis.GetKorisnik(username);
-            if(k.Password==password)
+            if(k!=null)
+            {
+                if(k.Password==password)
             {
                 var kategorije = redis.vratiSveKategorijeNaKojeJeKorisnikPretplacen(username);
                 foreach(var kat in kategorije)
@@ -62,6 +64,11 @@ public class KorisnikController : ControllerBase
             else
             {
                 return BadRequest("Nevalidan password");
+            }
+            }
+            else
+            {
+                return BadRequest("Nevalidan email");
             }
         }
         

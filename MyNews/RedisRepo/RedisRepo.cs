@@ -162,6 +162,10 @@ public class RedisRepo
     public Korisnik GetKorisnik(string mail)
     {
         var serializedKorisnik = redis.Get<string>(mail);
+        if(serializedKorisnik==null)
+        {
+            return null;
+        }
         Korisnik k = JsonSerializer.Deserialize<Korisnik>(serializedKorisnik);
         return k;
     }
