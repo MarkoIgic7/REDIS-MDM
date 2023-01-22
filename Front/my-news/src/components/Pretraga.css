@@ -1,0 +1,76 @@
+.Pretraga{
+    display:flex;
+    width: 50%;
+    height: 70px;
+    background: rgb(206, 202, 203, 0.7);
+    margin-top:20px;
+    justify-content: center;
+    border-radius: 10px;
+    
+
+}
+.PretragaDiv{
+    display:flex;
+    justify-content: center;
+}
+
+.deo-pretrage{
+    display: flex;
+    flex-direction: row;
+    flex-shrink: 1;
+    min-width: 30%;
+    
+    
+}
+.text{
+    margin-top:25px;
+}
+
+.dugmePretrazi{
+    min-width:40px;
+    max-height: 30px;
+    margin-top: 20px;
+    background-color: rgb(165, 42, 42);
+    border-width: 0ch;
+    color:white;
+    padding: 8px 20px;
+    border-radius: 4px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+
+.dugmeNaj
+{
+    min-width:40px;
+    max-height: 30px;
+    margin-top: 20px;
+    margin-left: 20px;
+    background-color: rgb(255, 254, 254);
+    color:rgb(22, 22, 22);
+    padding: 8px 20px;
+    border-radius: 4px;
+    border:none;
+    cursor: pointer;
+
+}
+
+.dugmeNaj:hover{
+    background-color: rgb(122, 23, 23);
+    color:rgb(250, 245, 245);
+}
+.KategorijaSelect{
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 22px;
+    margin-bottom: 10px;
+    width : 200px;
+    height: 30px;
+    min-width: 70px;
+    min-height: 30px;
+    font-size: large;
+    border-radius: 5px;
+    flex-shrink: 1;
+
+}
+
