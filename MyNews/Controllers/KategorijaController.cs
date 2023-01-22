@@ -27,9 +27,28 @@ public class KategorijaController : ControllerBase
     {
         //RedisRepo f = new RedisRepo();
         Kategorija k = new Kategorija();
-        k.Naziv = naziv;
+        List<Kategorija> sveKategorije = redis.GetKategorije();
+        bool postoji = false;
+        foreach( Kategorija kat in sveKategorije)
+        {
+            if(kat.Naziv==naziv)
+            {
+                postoji = true;
+            }
+        }
+        if(postoji)
+        {
+            return BadRequest("Postoji uneta kategorija");
+        }
+        else
+        {
+             k.Naziv = naziv;
         redis.setKategorija(k);
         return Ok(k.Id);
+        }
+        /*k.Naziv = naziv;
+        redis.setKategorija(k);
+        return Ok(k.Id);*/
     }
     [HttpGet]
     [Route("getKategorije")]
